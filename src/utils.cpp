@@ -180,6 +180,16 @@ float GetUserThrottleCommand()
     if (direction == 2)//No throttle val if in PARK also.
         return 0.0;
 
+  /// No regenreq (Clutch Pedal Switch)
+
+    if (IOMatrix::GetPin(IOMatrix::NOREGENREQ) != &DigIo::dummypin) {
+        Throttle::NoReGenReq = IOMatrix::GetPin(IOMatrix::NOREGENREQ)->Get();
+        Param::SetInt(Param::NoReGenReq,Throttle::NoReGenReq);
+    } else {
+        Throttle::NoReGenReq = 0;
+        Param::SetInt(Param::NoReGenReq,0);
+    }
+
     // calculate the throttle depending on the channel we've decided to use
     if (useChannel == 0)
         return Throttle::CalcThrottle(pot1val, 0, brake);

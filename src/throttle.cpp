@@ -50,6 +50,7 @@ float Throttle::idcmin;
 float Throttle::idcmax;
 int Throttle::speedLimit;
 float Throttle::ThrotRpmFilt;
+bool Throttle::NoReGenReq;
 float UDCres;
 float IDCres;
 float UDCprevspnt = 0;
@@ -178,7 +179,7 @@ float Throttle::CalcThrottle(int potval, int potIdx, bool brkpedal)
 
     if (brkpedal)
     {
-        if(speed < 100 || speed < regenendRpm)
+        if(speed < 100 || speed < regenendRpm || NoReGenReq > 0 )
         {
             return 0;
         }
@@ -234,8 +235,7 @@ float Throttle::CalcThrottle(int potval, int potIdx, bool brkpedal)
 
     //Do clever bits for regen and such.
 
-
-    if(speed < 100 || speed <regenendRpm)//No regen under 100 rpm or speed under regenendRpm
+    if(speed < 100 || speed <regenendRpm || NoReGenReq > 0 )//No regen under 100 rpm or speed under regenendRpm or noregenreq is high 
     {
         regenlim = 0;
     }
